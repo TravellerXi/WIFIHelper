@@ -80,11 +80,16 @@ class 登陆登出():
             "checkbox1": "on"
 
         }
-        StatusInfo = requests.post("http://172.31.31.31:8080/cn/login", data=params)
-        return StatusInfo.status_code
+        try:
+            StatusInfo = requests.post("http://172.31.31.31:8080/cn/login", data=params)
+            return StatusInfo.status_code
+        except:
+            return -1
     def 登出(self):
-        requests.post("http://172.31.31.31:8080/cn/logout")
-
+        try:
+            requests.post("http://172.31.31.31:8080/cn/logout")
+        except:
+            return -1
 
 
 
@@ -195,18 +200,25 @@ class 执行:
                 自定义登录界面()
             else:
                 (Username, Password) = self.用户密码
-                if 登陆登出.登陆(Username, Password) != 200:
-                    self.ThisWindows.Notify(title='提示', msg='用户名密码配置错误，请在弹出窗口里修改')
-                    time.sleep(2)
-                    自定义登录界面()
+                登陆结果=登陆登出.登陆(Username, Password)
+                if 登陆结果 != 200:
+                    if 登陆结果 == -1:
+                        self.ThisWindows.Notify(title='WIFI已断开', msg='请手动重连相关WIFI')
+                    else:
+                        self.ThisWindows.Notify(title='提示', msg='用户名密码配置错误，请在弹出窗口里修改')
+                        time.sleep(2)
+                        自定义登录界面()
 
         else:
             self.ThisWindows.Notify(title='第一次使用', msg='第一次使用，请在弹出窗口里输入用户名密码')
             time.sleep(2)
             自定义登录界面()
     def 检查网络(self):
-        if not (ping('baidu.com', count=1).success()):
-            self.ThisWindows.Notify("WIFI状态更新","认证已失效，正在重新认证")
-            self.登陆()
-            time.sleep(2)
-            self.ThisWindows.Notify("WIFI状态更新","网络已恢复")
+        try:
+            if not (ping('baidu.com', count=1).success()):
+                self.ThisWindows.Notify("WIFI状态更新", "认证已失效，正在重新认证")
+                self.登陆()
+                time.sleep(2)
+                self.ThisWindows.Notify("WIFI状态更新", "网络已恢复,已成功认证")
+        except:
+            self.ThisWindows.Notify(title='WIFI已断开', msg='请手动重连相关WIFI')
