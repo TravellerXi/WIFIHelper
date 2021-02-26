@@ -114,11 +114,15 @@ class 自定义登录界面:
         #    self.label3['text'] = '登陆成功'
         #else:
         #    self.label3['text'] = '用户名或密码错误，请重新输入！'
+class 初始化:
+    def 更新plist(self,CurrentDir):
+        DefaultPlist = resource_path(os.path.join("res", "Info.plist"))
+        copyfile(DefaultPlist,CurrentDir+'/Info.plist')
 
 class 密码机制:
     def __init__(self):
         windows_username = getpass.getuser()
-        ExeFileLocation = "/Users/yuxi/Documents/WIFI助手"
+        ExeFileLocation = "/Users/"+windows_username+"/Documents/WIFI助手"
         self.ConfigureFile = ExeFileLocation + "/Configure.ini"
         self.config = configparser.ConfigParser()
         self.config.read(self.ConfigureFile, encoding='utf-8')

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # coding=utf-8
 from Functions import *
+import multiprocessing
 from multiprocessing import Process
 import sys
 def ShowIcon():
@@ -23,8 +24,10 @@ def CheckProcess(pid):
     else:
         return True
 if __name__=="__main__":
-
-
+    CurrentPath = os.path.dirname(sys.argv[0])
+    初始化().更新plist(CurrentPath)
+    #初始化().test()
+    multiprocessing.freeze_support()
     ProcessIcon=Process(target=ShowIcon,args=())
     ProcessIcon.start()
     ProcessID = ProcessIcon.pid
