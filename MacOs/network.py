@@ -14,7 +14,7 @@ def AlwaysCheck(pid):
         time.sleep(3)
         pid=int(pid)
         if CheckProcess(pid) is False:
-            sys.exit(0)
+            os._exit(0)
 
 def CheckProcess(pid):
     try:
