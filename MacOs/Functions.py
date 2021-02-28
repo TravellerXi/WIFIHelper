@@ -121,8 +121,8 @@ class 初始化:
 
 class 密码机制:
     def __init__(self):
-        windows_username = getpass.getuser()
-        ExeFileLocation = "/Users/"+windows_username+"/Documents/WIFI助手"
+        Username = getpass.getuser()
+        ExeFileLocation = "/Users/"+Username+"/Documents/WIFI助手"
         self.ConfigureFile = ExeFileLocation + "/Configure.ini"
         self.config = configparser.ConfigParser()
         self.config.read(self.ConfigureFile, encoding='utf-8')

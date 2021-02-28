@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 # coding=utf-8
+# pip install pywin32 requests, pythonping
+
 from win32api import *
 from win32gui import *
 import win32con
@@ -191,6 +193,7 @@ class 执行:
     def __init__(self):
         登陆登出().登出()
         self.ThisWindows = WindowsBalloonTip(software_name='WIFI助手')
+        self.OfflineCount=0
     def 登陆(self):
         self.用户密码 = 密码机制().read()
         if self.用户密码 != 1:
@@ -216,9 +219,19 @@ class 执行:
     def 检查网络(self):
         try:
             if not (ping('baidu.com', count=1).success()):
-                self.ThisWindows.Notify("WIFI状态更新", "认证已失效，正在重新认证")
+                self.OfflineCount+=1
+                if self.OfflineCount <3:
+                    self.ThisWindows.Notify("WIFI状态更新", "认证已失效，正在重新认证")
+                else:
+                    if self.OfflineCount==3:
+                        self.ThisWindows.Notify("WIFI故障", "此WIFI目前存在故障，暂时屏蔽通知。待WIFI网络恢复，将再次通知")
                 self.登陆()
                 time.sleep(2)
-                self.ThisWindows.Notify("WIFI状态更新", "网络已恢复,已成功认证")
+                if ping('baidu.com', count=1).success():
+                    self.ThisWindows.Notify("WIFI状态更新", "网络已恢复,已成功认证")
+            else:
+                if self.OfflineCount>= 3:
+                    self.ThisWindows.Notify("WIFI故障恢复","WIFI故障已恢复，已成功认证")
+                self.OfflineCount=0
         except:
             self.ThisWindows.Notify(title='WIFI已断开', msg='请手动重连相关WIFI')
